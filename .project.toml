@@ -1,6 +1,11 @@
-slug = "energydata-art"
+[project]
+uuid = "2c16156e-86f6-477e-95cd-b6f93a8f867c"
 name = "energydata-art"
 description = "Art visualization project exploring open data around clean energy, climate change, and the future of the planet."
 tags = ["data-visualization", "climate", "energy", "d3", "observable", "duckdb", "open-data"]
+
+[publish]
+devlog_tag = "energydata-art"
+devlog_dest = "../dnuke.com/src/blog/posts"
 
 [devlog]
