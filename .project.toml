@@ -9,3 +9,5 @@ devlog_tag = "energydata-art"
 devlog_dest = "../dnuke.com/src/blog/posts"
 
 [devlog]
+version = "v1.0"
+source = "https://github.com/dnewcome/devlog-tools"
