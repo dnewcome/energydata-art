@@ -1,0 +1,13 @@
+{
+  "name": "energydata-art",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "fetch": "node scripts/fetch.js",
+    "dev": "observable preview",
+    "build": "observable build"
+  },
+  "devDependencies": {
+    "@observablehq/framework": "^1.13.4"
+  }
+}
