@@ -1,0 +1,6 @@
+slug = "energydata-art"
+name = "energydata-art"
+description = "Art visualization project exploring open data around clean energy, climate change, and the future of the planet."
+tags = ["data-visualization", "climate", "energy", "d3", "observable", "duckdb", "open-data"]
+
+[devlog]
