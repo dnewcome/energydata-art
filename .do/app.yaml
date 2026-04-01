@@ -1,4 +1,9 @@
 name: energydata-art
+domains:
+  - domain: tokenburn.watch
+    type: PRIMARY
+  - domain: www.tokenburn.watch
+    type: ALIAS
 static_sites:
   - name: energydata-art
     build_command: npm install && npm run build
