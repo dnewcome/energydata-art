@@ -6,5 +6,5 @@ domains:
     type: ALIAS
 static_sites:
   - name: energydata-art
-    build_command: npm install && npm run build
+    build_command: npm install && npm run build && node scripts/clean-urls.mjs
     output_dir: dist
