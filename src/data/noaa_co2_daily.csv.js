@@ -1,14 +1,12 @@
-// Data loader: parse NOAA Mauna Loa daily CO2 text file → clean CSV
-// Strips comment lines and outputs: date,ppm
-import { readFileSync } from "fs";
-
-const raw = readFileSync("data/raw/noaa_co2_daily_mlo.txt", "utf8");
+// Data loader: fetch NOAA Mauna Loa daily CO2 → clean CSV
+const res = await fetch("https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_daily_mlo.txt");
+if (!res.ok) throw new Error(`NOAA fetch failed: ${res.status}`);
+const raw = await res.text();
 const rows = [];
 
 for (const line of raw.split("\n")) {
   if (line.startsWith("#") || line.trim() === "") continue;
   const parts = line.trim().split(/\s+/);
-  // columns: year month day decimal_date ppm
   if (parts.length < 5) continue;
   const [year, month, day, , ppm] = parts;
   if (isNaN(parseFloat(ppm)) || parseFloat(ppm) < 0) continue;
