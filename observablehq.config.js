@@ -13,6 +13,5 @@ export default {
         { name: "AI Energy & Datacenters", path: "/ai-energy" },
       ],
     },
-    { name: "Scratch", path: "/scratch" },
   ],
 };
