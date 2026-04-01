@@ -10,7 +10,9 @@ export default {
         { name: "Keeling Curve", path: "/keeling-curve" },
         { name: "Global Energy Mix", path: "/energy-mix" },
         { name: "Power Plants", path: "/power-plants" },
+        { name: "AI Energy & Datacenters", path: "/ai-energy" },
       ],
     },
+    { name: "Scratch", path: "/scratch" },
   ],
 };

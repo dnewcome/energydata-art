@@ -1,0 +1,5 @@
+name: energydata-art
+static_sites:
+  - name: energydata-art
+    build_command: npm install && npm run build
+    output_dir: dist
