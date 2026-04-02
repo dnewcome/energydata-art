@@ -14,6 +14,7 @@ const powerSrc    = await FileAttachment("data/ai_datacenter_power_sources.csv")
 const hardware    = await FileAttachment("data/ai_hardware_efficiency.csv").csv({typed: true});
 const models      = await FileAttachment("data/ai_model_energy.csv").csv({typed: true});
 const timeline    = await FileAttachment("data/ai_datacenter_capacity_timeline.csv").csv({typed: true});
+const bench       = await FileAttachment("data/tokenpowerbench_findings.csv").csv({typed: true});
 ```
 
 ```js
@@ -410,11 +411,102 @@ display(Plot.plot({
 
 ---
 
+## Measured inference efficiency (TokenPowerBench)
+
+Empirically measured joules per token for open-weight models on H100 hardware. Batching is the biggest lever: throughput mode at batch=32 cuts energy per token by 3–4×.
+
+```js
+// Group by model+quantization for paired batch=1 vs batch=32 plot
+const benchByModel = bench.filter(d => d.batch_size === 1 || d.batch_size === 32);
+
+display(Plot.plot({
+  title: "Measured J / output token — batch=1 vs batch=32",
+  subtitle: "Same model at different batch sizes; lower = more efficient",
+  width: 800,
+  height: 380,
+  x: { label: "Joules per output token", grid: true },
+  y: { label: null },
+  color: {
+    domain: [1, 32],
+    range: ["#ef9a9a", "#fff176"],
+    legend: true,
+    label: "Batch size",
+  },
+  marks: [
+    // Connect paired measurements for the same model
+    Plot.link(
+      Object.values(
+        Object.groupBy(benchByModel, d => `${d.model_name}|${d.quantization}|${d.inference_engine}`)
+      ).filter(g => g.length === 2).map(g => ({
+        model: g[0].model_name,
+        quant: g[0].quantization,
+        engine: g[0].inference_engine,
+        j1: g.find(d => d.batch_size === 1)?.joules_per_output_token_measured,
+        j32: g.find(d => d.batch_size === 32)?.joules_per_output_token_measured,
+      })),
+      {
+        x1: "j1",
+        x2: "j32",
+        y1: d => `${d.model} (${d.quant}, ${d.engine})`,
+        y2: d => `${d.model} (${d.quant}, ${d.engine})`,
+        stroke: "#555",
+        strokeWidth: 1.5,
+        strokeDasharray: "3 2",
+      }
+    ),
+    Plot.dot(benchByModel, {
+      x: "joules_per_output_token_measured",
+      y: d => `${d.model_name} (${d.quantization}, ${d.inference_engine})`,
+      fill: d => d.batch_size,
+      r: 7,
+      tip: true,
+      sort: { y: "-x" },
+    }),
+  ],
+}));
+```
+
+```js
+// Prefill vs decode energy breakdown
+display(Plot.plot({
+  title: "Prefill vs. decode energy breakdown (J/token, batch=1)",
+  subtitle: "Decode (output) tokens cost 3–7× more energy than prefill (input) tokens",
+  width: 800,
+  height: 320,
+  marginLeft: 160,
+  x: { label: "Joules per token", grid: true },
+  y: { label: null },
+  color: {
+    domain: ["Output (decode)", "Input (prefill)"],
+    range: ["#fff176", "#4fc3f7"],
+    legend: true,
+  },
+  marks: [
+    Plot.barX(
+      bench.filter(d => d.batch_size === 1).flatMap(d => [
+        { model: d.model_name, segment: "Output (decode)", j: d.joules_per_output_token_measured },
+        { model: d.model_name, segment: "Input (prefill)", j: d.joules_per_prefill_token_measured },
+      ]),
+      {
+        x: "j",
+        y: "model",
+        fill: "segment",
+        tip: true,
+        sort: { y: "-x", reduce: "max" },
+      }
+    ),
+    Plot.ruleX([0]),
+  ],
+}));
+```
+
+---
+
 ## Data tables
 
 ```js
 const tableView = view(Inputs.select(
-  ["Operators", "Power sources", "Hardware", "Models", "Capacity timeline"],
+  ["Operators", "Power sources", "Hardware", "Models", "Capacity timeline", "TokenPowerBench"],
   { label: "Show table" }
 ));
 ```
@@ -426,6 +518,7 @@ const tableData = {
   "Hardware": hardware,
   "Models": models,
   "Capacity timeline": timeline,
+  "TokenPowerBench": bench,
 }[tableView];
 
 display(Inputs.table(tableData));
