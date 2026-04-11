@@ -12,6 +12,7 @@ export default {
         { name: "Power Plants", path: "/power-plants" },
         { name: "AI Energy & Datacenters", path: "/ai-energy" },
         { name: "Industrial AI & Reshoring", path: "/industrial-ai" },
+        { name: "Energy Explorer", path: "/energy-explorer" },
       ],
     },
   ],

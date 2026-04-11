@@ -45,4 +45,4 @@ display(html`<table style="width:100%;border-collapse:collapse">
 - [Keeling Curve](/keeling-curve) — Mauna Loa CO₂ rise since 1974
 - [Global Energy Mix](/energy-mix) — How the world generates electricity, by country and source
 - [Power Plants](/power-plants) — 35,000 power plants mapped by fuel type
-- [Energy Explorer](/notebooks/energy/) — interactive Python notebook (marimo, runs in browser)
+- [Energy Explorer](/energy-explorer) — interactive Python notebook (marimo, runs in browser)

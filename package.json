@@ -5,7 +5,8 @@
   "scripts": {
     "fetch": "node scripts/fetch.js",
     "dev": "observable preview",
-    "build": "observable build"
+    "build": "observable build",
+    "postbuild": "mkdir -p dist/notebooks && cp -r src/notebooks/energy dist/notebooks/energy"
   },
   "devDependencies": {
     "@observablehq/framework": "^1.13.4"
