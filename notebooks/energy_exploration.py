@@ -24,12 +24,13 @@ def _(IN_WASM, io, pl):
     DATA_WEB = "data"  # relative to the exported HTML file
 
     def load_csv(filename):
+        opts = dict(infer_schema_length=0, truncate_ragged_lines=True)
         if IN_WASM:
             from pyodide.http import open_url
             url = f"{DATA_WEB}/{filename}"
-            return pl.read_csv(io.StringIO(open_url(url).read()))
+            return pl.read_csv(io.StringIO(open_url(url).read()), **opts)
         else:
-            return pl.read_csv(f"{DATA_LOCAL}/{filename}")
+            return pl.read_csv(f"{DATA_LOCAL}/{filename}", **opts)
 
     energy = load_csv("owid_energy.csv")
     co2 = load_csv("owid_co2.csv")
