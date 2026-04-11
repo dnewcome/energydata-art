@@ -26,8 +26,10 @@ def _(IN_WASM, io, pl):
     def load_csv(filename):
         opts = dict(infer_schema_length=0, truncate_ragged_lines=True)
         if IN_WASM:
+            import js
             from pyodide.http import open_url
-            url = f"{DATA_WEB}/{filename}"
+            origin = js.window.location.origin
+            url = f"{origin}/notebooks/energy/data/{filename}"
             return pl.read_csv(io.StringIO(open_url(url).read()), **opts)
         else:
             return pl.read_csv(f"{DATA_LOCAL}/{filename}", **opts)
