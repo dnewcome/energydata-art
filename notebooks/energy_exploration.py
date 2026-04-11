@@ -28,7 +28,7 @@ def _(IN_WASM, io, pl):
         if IN_WASM:
             import js
             from pyodide.http import open_url
-            origin = js.window.location.origin
+            origin = js.location.origin
             url = f"{origin}/notebooks/energy/data/{filename}"
             return pl.read_csv(io.StringIO(open_url(url).read()), **opts)
         else:
